@@ -53,13 +53,11 @@ public class DebugExercise2 {
      *  For example if a = {2, 0, 10, 14} and b = {-5, 5, 20, 30},
      *  the result should be 57.
      * */
-    public static void sumOfElementwiseMaxes(int[] a, int[] b) {
+    public static int sumOfElementwiseMaxes(int[] a, int[] b) {
         int[] maxes = arrayMax(a, b);
-        if (maxes != null) {
-            int sumOfMaxes = arraySum(maxes);
-            System.out.println(sumOfMaxes);
-        }
 
+        int sumOfMaxes = arraySum(maxes);
+        return sumOfMaxes;
     }
 
 
@@ -67,6 +65,7 @@ public class DebugExercise2 {
         int[] a = {1, 11, -1, -11};
         int[] b = {3, -3, 2, -1};
 
-        sumOfElementwiseMaxes(a, b);
+        System.out.println(sumOfElementwiseMaxes(a, b));
+
     }
 }
