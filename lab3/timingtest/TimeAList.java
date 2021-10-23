@@ -22,12 +22,12 @@ public class TimeAList {
     }
 
     public static void timeAListConstruction() {
-        AList<Integer> N = new AList<>();
-        AList<Double> times = new AList<>();
+        AList<Integer> N = new AList<Integer>();
+        AList<Double> times = new AList<Double>();
 
 
         for (int i = 1000; i <= 1200000; i *= 2){
-            SLList<Integer> test = new SLList<>();
+            AList<Integer> test = new AList<Integer>();
 
             int j = i;
             Stopwatch sw = new Stopwatch();
