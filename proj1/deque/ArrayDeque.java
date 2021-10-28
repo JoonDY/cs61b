@@ -8,7 +8,14 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T>{
 
     public ArrayDeque() {
         items = (T []) new Object[8];
-        size = front = back = 0;
+        size = 0;
+        front = back = -1;
+    }
+
+    public ArrayDeque(int i) {
+        items = (T []) new Object[i];
+        size = 0;
+        front = back = -1;
     }
 
     public Iterator<T> iterator() {
@@ -38,10 +45,13 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T>{
             resize((int) Math.round(size * 1.1));
         }
 
-        if (front != 0 ) {
-            front = (front - 1);
-        } else {
+        if (front == -1) {
+            front = 0;
+            back = 0;
+        } else if (front == 0) {
             front = (items.length - 1);
+        } else {
+            front--;
         }
 
         items[front] = x;
@@ -53,11 +63,13 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T>{
         if (size == items.length) {
             resize((int) Math.round(size * 1.1));
         }
-        if (back == 0) {
-            front = 1;
+        if (back == -1) {
+            front = 0;
+            back = 0;
+        } else {
+            back = (back + 1) % items.length;
         }
 
-        back = (back + 1) % items.length;
         items[back] = x;
 
         size ++;
@@ -65,7 +77,7 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T>{
 
     private void resize(int capacity) {
         T[] a = (T []) new Object[capacity];
-        if (front > back) {
+        if (front >= back) {
             int section = items.length - front;
             System.arraycopy(items, front, a, 0, section);
             System.arraycopy(items, 0, a, section, back + 1);
@@ -96,7 +108,12 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T>{
         downsize();
         T returnItem = items[front];
         items[front] = null;
-        front = (front + 1) % items.length;
+        if (front == back) {
+            front = -1;
+            back = -1;
+        } else {
+            front = (front + 1) % items.length;
+        }
         size--;
         return returnItem;
     }
@@ -109,13 +126,16 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T>{
         downsize();
         T returnItem = items[back];
         items[back] = null;
-        back--;
+        if (back == front) {
+            back = -1;
+            front = -1;
+        } else if (back == 0) {
+            back = items.length-1;
+        } else {
+            back--;
+        }
         size--;
         return returnItem;
-    }
-
-    public boolean isEmpty() {
-        return size == 0;
     }
 
     public int size() {
@@ -123,6 +143,10 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T>{
     }
 
     public T get(int index) {
+        if (index >= size) {
+            return null;
+        }
+
         int calcIndex = (front + index) % items.length;
         return items[calcIndex];
     }
@@ -148,7 +172,8 @@ public class ArrayDeque<T> implements Iterable<T>, Deque<T>{
         if (!(other instanceof Deque)) {
             return false;
         }
-        ArrayDeque<T> compare = (ArrayDeque<T>) other;
+
+        Deque<T> compare = (Deque<T>) other;
         if (compare.size() != this.size()) {
             return false;
         }

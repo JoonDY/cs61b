@@ -84,10 +84,6 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T>{
         return returnItem;
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
     public int size() {
         return size;
     }
@@ -140,7 +136,7 @@ public class LinkedListDeque<T> implements Iterable<T>, Deque<T>{
         if (!(other instanceof Deque)) {
             return false;
         }
-        LinkedListDeque<T> compare = (LinkedListDeque<T>) other;
+        Deque<T> compare = (Deque<T>) other;
         if (compare.size() != this.size()) {
             return false;
         }

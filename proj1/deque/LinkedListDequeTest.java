@@ -1,5 +1,7 @@
 package deque;
 
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.Stopwatch;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -122,4 +124,127 @@ public class LinkedListDequeTest {
 
         assertEquals(50, (int) test.get(50));
         assertEquals(50, (int) test.getRecursive(50));    }
+
+    @Test
+    public void timeTest() {
+        int testCount1 = 10000;
+        int testCount2 = 1000000;
+
+        LinkedListDeque<Integer> test1 = new LinkedListDeque<>();
+        LinkedListDeque<Integer> test2 = new LinkedListDeque<>();
+
+        Stopwatch sw1 = new Stopwatch();
+        for (int i = 0; i < testCount1; i++) {
+            test1.addFirst(i);
+        }
+        double time1 = sw1.elapsedTime();
+        double avg1 = time1 * 1000000 / testCount1;
+
+        Stopwatch sw2 = new Stopwatch();
+        for (int i = 0; i < testCount2; i++) {
+            test2.addFirst(i);
+        }
+        double time2 = sw2.elapsedTime();
+        double avg2 = time2 * 1000000 / testCount2;
+
+        System.out.println(avg1);
+        System.out.println(avg2);
+        assertTrue("addFirst not within .5 microseconds/op", Math.abs(avg1 - avg2) < .5);
+
+        sw1 = new Stopwatch();
+        for (int i = 0; i < testCount1; i++) {
+            test1.addLast(i);
+        }
+        time1 = sw1.elapsedTime();
+        avg1 = time1 * 1000000 / testCount1;
+
+        sw2 = new Stopwatch();
+        for (int i = 0; i < testCount2; i++) {
+            test2.addLast(i);
+        }
+        time2 = sw2.elapsedTime();
+        avg2 = time2 * 1000000 / testCount2;
+
+        System.out.println(avg1);
+        System.out.println(avg2);
+        assertTrue("addLast not within .5 microseconds/op", Math.abs(avg1 - avg2) < .5);
+
+        sw1 = new Stopwatch();
+        for (int i = 0; i < testCount1; i++) {
+            test1.removeFirst();
+        }
+        time1 = sw1.elapsedTime();
+        avg1 = time1 * 1000000 / testCount1;
+
+        sw2 = new Stopwatch();
+        for (int i = 0; i < testCount2; i++) {
+            test2.removeFirst();
+        }
+        time2 = sw2.elapsedTime();
+        avg2 = time2 * 1000000 / testCount2;
+
+        System.out.println(avg1);
+        System.out.println(avg2);
+        assertTrue("removeFirst not within .5 microseconds/op", Math.abs(avg1 - avg2) < .5);
+
+        sw1 = new Stopwatch();
+        for (int i = 0; i < testCount1; i++) {
+            test1.removeLast();
+        }
+        time1 = sw1.elapsedTime();
+        avg1 = time1 * 1000000 / testCount1;
+
+        sw2 = new Stopwatch();
+        for (int i = 0; i < testCount2; i++) {
+            test2.removeLast();
+        }
+        time2 = sw2.elapsedTime();
+        avg2 = time2 * 1000000 / testCount2;
+
+        System.out.println(avg1);
+        System.out.println(avg2);
+        assertTrue("removeLast not within .5 microseconds/op", Math.abs(avg1 - avg2) < .5);
+    }
+
+    @Test
+    public void randomizedTest() {
+        LinkedListDeque<Integer> test1 = new LinkedListDeque<>();
+        LinkedListDeque<Integer> test2 = new LinkedListDeque<>();
+
+        int N = 5000;
+        for (int i = 0; i < N; i += 1) {
+            int operationNumber = StdRandom.uniform(0, 6);
+            if (operationNumber == 0) {
+                // addLast
+                int randVal = StdRandom.uniform(0, 100);
+                test1.addLast(randVal);
+                test2.addLast(randVal);
+            } else if (operationNumber == 1) {
+                // size
+                assertEquals(test1.size(), test2.size());
+            } else if (operationNumber == 2) {
+                // getLast
+                if (test2.size() == 0) {
+                    continue;
+                }
+                assertEquals(test1.get(0), test2.get(0));
+            } else if (operationNumber == 3) {
+                // removeLast
+                if (test1.size() == 0) {
+                    continue;
+                }
+                assertEquals(test2.removeLast(), test1.removeLast());
+            } else if (operationNumber == 4) {
+                int randVal = StdRandom.uniform(0, 100);
+                test1.addFirst(randVal);
+                test2.addFirst(randVal);
+            } else if (operationNumber == 5) {
+                // removeLast
+                if (test1.size() == 0) {
+                    continue;
+                }
+                assertEquals(test2.removeFirst(), test1.removeFirst());
+            }
+        }
+    }
 }
